@@ -1,21 +1,23 @@
 package controllers;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/HelloServlet")
-public class HelloServlet extends HttpServlet {
+import org.apache.commons.beanutils.BeanUtils;
+
+import beans.form_data.RegisterData;
+
+@WebServlet("/register")
+public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	/*
-	 * service/doGet/doPost 
-	 * @WebServlet/multi-threading/life-cycle
-	 */
-    public HelloServlet() {
+       
+    public RegisterServlet() {
         super();
     }
 
@@ -23,26 +25,20 @@ public class HelloServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
-		System.out.println(request.getContextPath());
-		String name = request.getParameter("ho_ten");
-		request.setAttribute("name", name);
-		request.getRequestDispatcher("/views/welcome.jsp")
+		request.getRequestDispatcher("/views/register.jsp")
 		.forward(request, response);
 	}
-	
-	public void init() {
-		System.out.println("Init");
-	}
-	
-	public void service(
+
+	protected void doPost(
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
-		System.out.println("Service ...");
-		super.service(request, response);
-	}
-	
-	public void destroy() {
-		System.out.println("Destroy ... ");
+		RegisterData bean = new RegisterData();
+		try {
+			BeanUtils.populate(bean, request.getParameterMap());
+			System.out.println(bean.getFullname());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
