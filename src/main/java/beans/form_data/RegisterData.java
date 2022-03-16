@@ -8,7 +8,22 @@ public class RegisterData {
 	String dia_chi;
 	int gioi_tinh;
 	int loai_tai_khoan;
+	
+	public RegisterData() {
+		//
+	}
 
+	public RegisterData(String fullname, String email, String password, String sdt, String dia_chi, int gioi_tinh,
+			int loai_tai_khoan) {
+		super();
+		this.fullname = fullname;
+		this.email = email;
+		this.password = password;
+		this.sdt = sdt;
+		this.dia_chi = dia_chi;
+		this.gioi_tinh = gioi_tinh;
+		this.loai_tai_khoan = loai_tai_khoan;
+	}
 	public String getFullname() {
 		return fullname;
 	}

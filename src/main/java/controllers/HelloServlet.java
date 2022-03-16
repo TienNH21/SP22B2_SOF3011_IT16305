@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,11 +25,14 @@ public class HelloServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		Date now = new Date();
+		
 		System.out.println(request.getContextPath());
 		String name = request.getParameter("ho_ten");
 		request.setAttribute("name", name);
 		
 		request.setAttribute("view", "/views/welcome.jsp");
+		request.setAttribute("now", now);
 		request.getRequestDispatcher("/views/layout.jsp")
 		.forward(request, response);
 	}
