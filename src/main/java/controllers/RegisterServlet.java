@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 
 import beans.form_data.RegisterData;
+import entities.User;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
@@ -33,10 +34,9 @@ public class RegisterServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
-		RegisterData bean = new RegisterData();
+		User entity = new User();
 		try {
-			BeanUtils.populate(bean, request.getParameterMap());
-			System.out.println(bean.getFullname());
+			BeanUtils.populate(entity, request.getParameterMap());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
