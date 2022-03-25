@@ -10,7 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import beans.form_data.RegisterData;
+import dao.UserDAO;
+import entities.User;
+import utils.JpaUtil;
 
 @WebServlet({
 	"/users/index",
@@ -22,6 +27,12 @@ import beans.form_data.RegisterData;
 	"/users/show",
 })
 public class UserServlet extends HttpServlet {
+	private UserDAO userDAO;
+	
+	public UserServlet() {
+		this.userDAO = new UserDAO();
+	}
+
 	protected void doGet(
 		HttpServletRequest request,
 		HttpServletResponse response
@@ -47,6 +58,15 @@ public class UserServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		String uri = request.getRequestURI();
+		
+		if (uri.contains("store")) {
+			this.store(request, response);
+		} else if (uri.contains("update")) {
+			this.update(request, response);
+		} else {
+			// 404
+		}
 	}
 
 	protected void index(
@@ -82,6 +102,10 @@ public class UserServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		request.setAttribute("view",
+			"/views/admin/users/create.jsp");
+		request.getRequestDispatcher("/views/layout.jsp")
+		.forward(request, response);
 	}
 
 	protected void edit(
@@ -100,6 +124,22 @@ public class UserServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		User entity = new User();
+		try {
+			BeanUtils.populate(entity,
+				request.getParameterMap());
+			
+			this.userDAO.create(entity);
+			
+			response.sendRedirect("/SP22B2_SOF3011_IT16305"
+				+ "/users/index");
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			// Thông báo lỗi
+			response.sendRedirect("/SP22B2_SOF3011_IT16305"
+					+ "/users/create");
+		}
 	}
 
 	protected void update(
