@@ -73,18 +73,7 @@ public class UserServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
-		List<RegisterData> ds = new ArrayList<RegisterData>();
-		
-		RegisterData o1 = new RegisterData("Ng Van A",
-			"anv@gmail.com", "123456", "01231", "HN", 1, 0),
-			o2 = new RegisterData("Ng Van B", "anv@gmail.com",
-				"123456", "01231", "HN", 1, 0),
-			o3 = new RegisterData("Ng Thi C", "anv@gmail.com",
-				"123456", "01231", "HN", 0, 0);
-		
-		ds.add(o1);
-		ds.add(o2);
-		ds.add(o3);
+		List<User> ds = this.userDAO.all();
 		request.setAttribute("ds", ds);
 		request.setAttribute("view", 
 			"/views/admin/users/index.jsp");
@@ -111,13 +100,33 @@ public class UserServlet extends HttpServlet {
 	protected void edit(
 		HttpServletRequest request,
 		HttpServletResponse response
-	) throws ServletException, IOException {
+	) throws ServletException, IOException, Exception {
+		String idStr = request.getParameter("id");
+		int id = Integer.parseInt(idStr);
+		User entity = this.userDAO.findById(id);
+		request.setAttribute("view",
+			"/views/admin/users/edit.jsp");
+		request.getRequestDispatcher("/views/layout.jsp")
+			.forward(request, response);
 	}
 
 	protected void delete(
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		try {
+			String idStr = request.getParameter("id");
+			int id = Integer.parseInt(idStr);
+			User entity = this.userDAO.findById(id);
+			this.userDAO.delete(entity);
+			// TODO: Thông báo thành công
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: Thông báo lỗi
+		}
+
+		response.sendRedirect("/SP22B2_SOF3011_IT16305"
+			+ "/users/index");
 	}
 
 	protected void store(
