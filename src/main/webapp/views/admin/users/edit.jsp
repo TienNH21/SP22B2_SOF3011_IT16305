@@ -18,10 +18,6 @@
 		value="${ user.email }" />
 	</div>
 	<div>
-		<label>Password</label>
-		<input type="password" name="password" disabled />
-	</div>
-	<div>
 		<label>SĐT</label>
 		<input type="text" name="sdt"
 		value="${ user.sdt }" />
