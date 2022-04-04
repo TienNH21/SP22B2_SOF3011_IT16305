@@ -6,13 +6,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.UserDAO;
+import entities.User;
+import utils.EncryptUtil;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UserDAO userDAO;
        
     public LoginServlet() {
         super();
+        
+        this.userDAO = new UserDAO();
     }
 
 	protected void doGet(
@@ -27,9 +35,28 @@ public class LoginServlet extends HttpServlet {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		String email = request.getParameter("email"),
 			pwd = request.getParameter("password");
 		
+		if (email.length() == 0 || pwd.length() == 0) {
+			session.setAttribute("error",
+				"Không được để trống");
+			response.sendRedirect("/SP22B2_SOF3011_IT16305"
+				+ "/login");
+		}
+		
+		
 		System.out.println(email + "-" + pwd);
+		User u = this.userDAO.findByEmail(email);
+		
+		boolean checked = EncryptUtil.check(pwd, u.getPassword());
+		
+		if (checked == true) {
+			// Đăng nhập thành công
+			session.setAttribute("user", u);
+		} else {
+			// Đăng nhập thất bại			
+		}
 	}
 }

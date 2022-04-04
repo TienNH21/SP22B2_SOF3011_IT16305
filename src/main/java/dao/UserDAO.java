@@ -20,7 +20,7 @@ public class UserDAO {
 			this.em.getTransaction().begin();
 			
 			this.em.persist(entity);
-			
+			this.em.flush();
 			this.em.getTransaction().commit();
 			
 			return entity;
@@ -72,5 +72,14 @@ public class UserDAO {
 			this.em.getTransaction().rollback();
 			throw e;
 		}
+	}
+	
+	public User findByEmail(String email) {
+		String jpql = "SELECT obj FROM User obj "
+				+ "WHERE obj.email = :email";
+		TypedQuery<User> query = this.em
+				.createQuery(jpql, User.class);
+		query.setParameter("email", email);
+		return query.getSingleResult();
 	}
 }

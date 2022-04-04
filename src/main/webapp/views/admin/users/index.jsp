@@ -1,4 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page
+	language="java"
+	contentType="text/html; charset=UTF-8"
+	session="true"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 
@@ -7,6 +10,20 @@
 		href="/SP22B2_SOF3011_IT16305/users/create"
 		class="btn btn-success">Thêm mới</a>
 </div>
+
+<c:if test="${ !empty sessionScope.error }">
+	<div class="alert alert-danger">
+		${ sessionScope.error }
+	</div>
+	<c:remove var="error" scope="session" />
+</c:if>
+
+<c:if test="${ !empty sessionScope.message }">
+	<div class="alert alert-success">
+		${ sessionScope.message }
+	</div>
+	<c:remove var="error" scope="session" />
+</c:if>
 
 <c:if test="${ empty ds }">
 	<p class="alert alert-warning">
